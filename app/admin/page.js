@@ -7,7 +7,7 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 )
 
-const ADMIN_EMAIL = process.env.NEXT_PUBLIC_ADMIN_EMAIL
+const ADMIN_EMAILS = (process.env.NEXT_PUBLIC_ADMIN_EMAIL || '').split(',').map(e => e.trim())
 const CATEGORIES = ['Atta & Flour','Dal & Pulses','Rice','Oil','Spices','Snacks','Soap & Shampoo','Biscuits','Dairy','Other']
 const EMOJIS = ['🌾','🫙','🫘','🍚','🧂','🧈','🍬','🫖','🧃','🧹','🧼','📦','🎁','🥜','🌽','🍯','🧄','🧅','🥛','🍫']
 
@@ -49,7 +49,7 @@ export default function AdminPage() {
     }
   }, [user])
 
-  const isAdmin = (u) => !ADMIN_EMAIL || u?.email === ADMIN_EMAIL
+  const isAdmin = (u) => ADMIN_EMAILS.length === 0 || ADMIN_EMAILS.includes(u?.email)
 
   async function signInWithGoogle() {
     await supabase.auth.signInWithOAuth({
